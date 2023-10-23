@@ -1,0 +1,25 @@
+# Comentários começam com um "#" (cerquilha) e são ignorados
+# Ignorar arquivos de compilação e caches
+*.log
+*.log.*
+*.log/
+node_modules/
+dist/
+
+# Ignorar arquivos de configuração de IDE
+.idea/
+.vscode/
+.project
+*.swp
+
+# Ignorar arquivos sensíveis
+secrets.json
+
+# Ignorar arquivos de compilação de linguagens específicas
+*.class
+*.pyc
+*.o
+
+# Ignorar arquivos gerados por ferramentas
+Thumbs.db
+.DS_Store
