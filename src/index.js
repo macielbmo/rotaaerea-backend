@@ -1,10 +1,23 @@
+require('dotenv').config();
+
 const express = require('express');
+const morgan = require('morgan');
+
+const mongoose = require('mongoose');
+const path = require('path');
 const routes = require('./routes');
 const cors = require('./app/middlewares/cors');
+
+// database setup
+mongoose.connect(process.env.MONGO_URL);
 
 const app = express();
 
 app.use(express.json());
+app.use(express.urlencoded(({ extended: true })));
+app.use(morgan('dev'));
+app.use('/image', express.static(path.resolve(__dirname, '..', 'temp', 'uploads')));
+
 app.use(cors);
 app.use(routes);
 

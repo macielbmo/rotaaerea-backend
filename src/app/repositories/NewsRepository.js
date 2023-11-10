@@ -1,23 +1,45 @@
 const db = require('../../database');
 
 class NewsRepository {
+  async findAll(orderBy = 'DESC') {
+    const direction = orderBy.toUpperCase() === 'DESC' ? 'DESC' : 'ASC';
+    const rows = await db.query(`
+    SELECT news.*, categories_news.name AS category_user_name
+    FROM news
+    LEFT JOIN categories_news ON categories_news.id = news.category
+    ORDER BY news.created_at ${direction}`);
+    return rows;
+  }
+
   async create({
-    editorContent,
-    titleNews,
+    title,
     subtitle,
+    content,
     author,
-    fonteTitle,
-    urlFonte,
-    image,
+    sourceNews,
+    urlSource,
+    urlImg,
     descriptionImg,
+    categoryId,
+    tags,
+    toSchedule,
+    status,
   }) {
     const [row] = await db.query(`
-      INSERT INTO news(title, subtitle, content, author, news_source, url_source, url_image, image_description)
-      VALUES($1, $2, $3, $4, $5, $6, $7, $8)
+      INSERT INTO news(title, subtitle, content, author, news_source, url_source, url_image, image_description, status, schedule, category, tags)
+      VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
       RETURNING *
-    `, [titleNews, subtitle, editorContent, author, fonteTitle, urlFonte, image, descriptionImg]);
+    `, [title, subtitle, content, author, sourceNews, urlSource, urlImg, descriptionImg, status, toSchedule, categoryId, tags]);
 
     return row;
+  }
+
+  async delete(id) {
+    const deleteOp = await db.query(`
+    DELETE FROM news WHERE id = $1
+    `, [id]);
+
+    return deleteOp;
   }
 }
 
