@@ -39,6 +39,7 @@ router.delete('/categories/:id', CategoryNewsController.delete);
 
 // Rota das Noticias
 router.get('/news', NewsController.index);
+router.get('/news/:id', NewsController.show);
 router.post('/news', NewsController.store);
 router.delete('/news/:id', NewsController.delete);
 

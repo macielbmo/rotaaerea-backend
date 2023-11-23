@@ -10,6 +10,15 @@ class NewsController {
     response.json(users);
   }
 
+  async show(request, response) {
+    const { id } = request.params;
+    const news = await NewsRepository.findById(id);
+
+    console.log(news);
+
+    response.json(news);
+  }
+
   async store(request, response) {
     const {
       title,

@@ -4,11 +4,20 @@ class NewsRepository {
   async findAll(orderBy = 'DESC') {
     const direction = orderBy.toUpperCase() === 'DESC' ? 'DESC' : 'ASC';
     const rows = await db.query(`
-    SELECT news.*, categories_news.name AS category_user_name
+    SELECT news.*, categories_news.name AS category_news_name
     FROM news
     LEFT JOIN categories_news ON categories_news.id = news.category
     ORDER BY news.created_at ${direction}`);
     return rows;
+  }
+
+  async findById(newsId) {
+    const [row] = await db.query(`
+    SELECT news.*, categories_news.name AS category_news_name
+    FROM news
+    INNER JOIN categories_news ON categories_news.id = news.category
+    WHERE news.id = $1`, [newsId]);
+    return row;
   }
 
   async create({
