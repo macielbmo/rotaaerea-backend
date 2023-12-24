@@ -28,3 +28,4 @@ src/database/docker-compose.yml
 
 # Ignorar pasta temp
 temp/
+.vercel

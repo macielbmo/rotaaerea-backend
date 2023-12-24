@@ -8,21 +8,21 @@ const client = new S3Client({ region: 'sa-east-1' });
 const multerS3 = require('multer-s3');
 
 const storageTypes = {
-  local: multer.diskStorage({
-    destination: (req, file, cb) => {
-      cb(null, path.resolve(__dirname, '..', '..', 'temp', 'uploads'));
-    },
+  // local: multer.diskStorage({
+  //   destination: (req, file, cb) => {
+  //     cb(null, path.resolve(__dirname, '..', '..', 'temp', 'uploads'));
+  //   },
 
-    filename: (req, file, cb) => {
-      crypto.randomBytes(16, (err, hash) => {
-        if (err) cb(err);
+  //   filename: (req, file, cb) => {
+  //     crypto.randomBytes(16, (err, hash) => {
+  //       if (err) cb(err);
 
-        file.key = `${hash.toString('hex')}-${file.originalname}`;
+  //       file.key = `${hash.toString('hex')}-${file.originalname}`;
 
-        cb(null, file.key);
-      });
-    },
-  }),
+  //       cb(null, file.key);
+  //     });
+  //   },
+  // }),
 
   s3: multerS3({
     s3: client,
