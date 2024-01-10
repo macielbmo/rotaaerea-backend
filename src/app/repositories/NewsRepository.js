@@ -23,7 +23,7 @@ class NewsRepository {
   async create({
     title,
     subtitle,
-    content,
+    contentId,
     author,
     sourceNews,
     urlSource,
@@ -35,10 +35,10 @@ class NewsRepository {
     status,
   }) {
     const [row] = await db.query(`
-      INSERT INTO news(title, subtitle, content, author, news_source, url_source, url_image, image_description, status, schedule, category, tags)
+      INSERT INTO news(title, subtitle, content_id, author, news_source, url_source, url_img, img_description, status, schedule, category_news, tags)
       VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
       RETURNING *
-    `, [title, subtitle, content, author, sourceNews, urlSource, urlImg, descriptionImg, status, toSchedule, categoryId, tags]);
+    `, [title, subtitle, contentId, author, sourceNews, urlSource, urlImg, descriptionImg, status, toSchedule, categoryId, tags]);
 
     return row;
   }

@@ -1,5 +1,6 @@
 const NewsRepository = require('../repositories/NewsRepository');
 const db = require('../../database');
+const NewsContentRepository = require('../repositories/NewsContentRepository');
 
 class NewsController {
   // Listar todos os registros
@@ -47,30 +48,47 @@ class NewsController {
       return response.status(400).json({ error: 'Image is required' });
     }
 
-    const [categoryUUID] = await db.query(`
-      SELECT id
-      FROM categories_news
-      WHERE name = ($1)
-    `, [category]);
+    try {
+      // Criar o newsContent e obter o ID
+      const newsContent = await NewsContentRepository.create(content);
+      if (!newsContent || !newsContent.id) {
+        return response.status(500).json({ error: 'Error creating news content' });
+      }
 
-    const categoryId = categoryUUID.id;
+      const contentId = newsContent.id;
 
-    const news = await NewsRepository.create({
-      title,
-      subtitle,
-      content,
-      author,
-      sourceNews,
-      urlSource,
-      urlImg,
-      descriptionImg,
-      categoryId,
-      tags,
-      toSchedule,
-      status,
-    });
+      // Obter o ID da categoria
+      const [categoryResult] = await db.query(`
+        SELECT id
+        FROM categories_news
+        WHERE name = ($1)
+      `, [category]);
 
-    response.json(news);
+      const categoryId = categoryResult.id;
+
+      // Criar o registro na tabela news usando o ID do newsContent
+
+      const news = await NewsRepository.create({
+        title,
+        subtitle,
+        contentId,
+        author,
+        sourceNews,
+        urlSource,
+        urlImg,
+        descriptionImg,
+        categoryId,
+        tags,
+        toSchedule,
+        status,
+      });
+
+      // Responder com os dados do news
+      response.json(news);
+    } catch (error) {
+      console.error('Error creating news:', error);
+      response.status(500).json({ error: 'Internal server error' });
+    }
   }
 
   // Apagar um registro
