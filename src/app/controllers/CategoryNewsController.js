@@ -33,13 +33,13 @@ class CategoryNewsController {
 
   async update(request, response) {
     const { id } = request.params;
-    const { name, color } = request.body;
+    const { name } = request.body;
 
     if (!name) {
       return response.status(404).json({ error: 'User name required' });
     }
 
-    const category = await CategoriesNewsRepository.update(id, { name, color });
+    const category = await CategoriesNewsRepository.update(id, { name });
 
     response.json(category);
   }

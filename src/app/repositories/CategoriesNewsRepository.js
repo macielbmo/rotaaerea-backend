@@ -22,23 +22,23 @@ class CategoriesNewsRespository {
     return row;
   }
 
-  async create({ name, color }) {
+  async create({ name }) {
     const [row] = await db.query(`
-      INSERT INTO categories_news(name, color)
-      VALUES($1, $2)
+      INSERT INTO categories_news(name)
+      VALUES($1)
       RETURNING *
-    `, [name, color]);
+    `, [name]);
 
     return row;
   }
 
-  async update(id, { name, color }) {
+  async update(id, { name }) {
     const [row] = await db.query(`
       UPDATE categories_news
-      SET name = $1, color = $2
+      SET name = $1
       WHERE id = $3
       RETURNING *
-    `, [name, color, id]);
+    `, [name, id]);
 
     return row;
   }

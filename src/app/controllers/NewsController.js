@@ -2,23 +2,22 @@ const NewsRepository = require('../repositories/NewsRepository');
 const db = require('../../database');
 
 class NewsController {
+  // Listar todos os registros
   async index(request, response) {
-    // Listar todos os registros
     const { orderBy } = request.query;
     const users = await NewsRepository.findAll(orderBy);
 
     response.json(users);
   }
 
+  // Listar por ID
   async show(request, response) {
     const { id } = request.params;
     const news = await NewsRepository.findById(id);
-
-    console.log(news);
-
     response.json(news);
   }
 
+  // Criar um novo registro
   async store(request, response) {
     const {
       title,
@@ -74,6 +73,7 @@ class NewsController {
     response.json(news);
   }
 
+  // Apagar um registro
   async delete(request, response) {
     const { id } = request.params;
 
