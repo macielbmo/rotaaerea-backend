@@ -6,7 +6,7 @@ class NewsRepository {
     const rows = await db.query(`
     SELECT news.*, categories_news.name AS category_news_name
     FROM news
-    LEFT JOIN categories_news ON categories_news.id = news.category
+    LEFT JOIN categories_news ON categories_news.id = news.category_news
     ORDER BY news.created_at ${direction}`);
     return rows;
   }
