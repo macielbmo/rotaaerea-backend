@@ -13,10 +13,18 @@ class NewsRepository {
 
   async findById(newsId) {
     const [row] = await db.query(`
-    SELECT news.*, categories_news.name AS category_news_name
-    FROM news
-    INNER JOIN categories_news ON categories_news.id = news.category
-    WHERE news.id = $1`, [newsId]);
+    SELECT
+      news.*,
+      categories_news.name AS category_news_name,
+      news_content.content as content
+    FROM
+      news
+    INNER JOIN
+      categories_news ON categories_news.id = news.category_news
+    INNER JOIN
+      news_content ON news_content.id = news.content_id
+    WHERE
+      news.id = $1`, [newsId]);
     return row;
   }
 

@@ -11,7 +11,7 @@ class NewsController {
     response.json(users);
   }
 
-  // Listar por ID
+  // Listar por ID da noticia
   async show(request, response) {
     const { id } = request.params;
     const news = await NewsRepository.findById(id);
@@ -67,7 +67,6 @@ class NewsController {
       const categoryId = categoryResult.id;
 
       // Criar o registro na tabela news usando o ID do newsContent
-
       const news = await NewsRepository.create({
         title,
         subtitle,
