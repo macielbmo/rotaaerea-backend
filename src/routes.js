@@ -2,11 +2,13 @@ const { Router } = require('express');
 const multer = require('multer');
 const multerConfig = require('./config/multer');
 
+// Importações Controller
 const UserController = require('./app/controllers/UserController');
 const UserCategoryController = require('./app/controllers/UsersCategoryController');
 const CategoryNewsController = require('./app/controllers/CategoryNewsController');
 const NewsController = require('./app/controllers/NewsController');
 const ImageUploadController = require('./app/controllers/ImageUploadController');
+const CadastroNewsletterController = require('./app/controllers/CadastroNewsletterController');
 
 const router = Router();
 
@@ -30,7 +32,7 @@ router.post('/categories-user', UserCategoryController.store);
 router.get('/categories-user/:name', UserCategoryController.show);
 router.delete('/categories-user/:id', UserCategoryController.delete);
 
-// Rotadas das Categories News
+// Rotas das Categories News
 router.get('/categories', CategoryNewsController.index);
 router.post('/categories', CategoryNewsController.store);
 router.get('/categories/:id', CategoryNewsController.show);
@@ -39,6 +41,7 @@ router.delete('/categories/:id', CategoryNewsController.delete);
 
 // Rota das Noticias
 router.get('/news', NewsController.index);
+router.get('/newsLimited', NewsController.getLimit);
 router.get('/news/:id', NewsController.show);
 router.post('/news', NewsController.store);
 router.delete('/news/:id', NewsController.delete);
@@ -47,5 +50,9 @@ router.delete('/news/:id', NewsController.delete);
 router.post('/image', multer(multerConfig).single('file'), ImageUploadController.store);
 router.get('/image', ImageUploadController.index);
 router.delete('/image/:id', ImageUploadController.delete);
+
+// Newsletter
+router.get('/newsletter/:email', CadastroNewsletterController.show);
+router.post('/newsletter', CadastroNewsletterController.store);
 
 module.exports = router;

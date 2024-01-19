@@ -11,6 +11,18 @@ class NewsRepository {
     return rows;
   }
 
+  async findLimit(orderBy = 'DESC', limit = 10, newsId = null) {
+    const direction = orderBy.toUpperCase() === 'DESC' ? 'DESC' : 'ASC';
+    const rows = await db.query(`
+    SELECT news.*, categories_news.name AS category_news_name
+    FROM news
+    LEFT JOIN categories_news ON categories_news.id = news.category_news
+    WHERE news.id <> $1 OR news.id IS NULL
+    ORDER BY news.created_at ${direction}
+    LIMIT $2`, [newsId, limit]);
+    return rows;
+  }
+
   async findById(newsId) {
     const [row] = await db.query(`
     SELECT
