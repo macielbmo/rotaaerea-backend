@@ -13,11 +13,11 @@ class NewsController {
 
   // Listar número maximo de registros
   async getLimit(request, response) {
-    const limit = request.query.limit || 10;
-    const newsId = request.query.id || null;
+    const { limit, id, idcategory } = await request.query;
+
     const { orderBy } = request.query;
 
-    const users = await NewsRepository.findLimit(orderBy, limit, newsId);
+    const users = await NewsRepository.findLimit(orderBy, limit, id, idcategory);
 
     response.json(users);
   }
