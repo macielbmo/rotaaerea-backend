@@ -101,6 +101,63 @@ class NewsController {
     }
   }
 
+  // Update de registro
+  async update(request, response) {
+    const {
+      title,
+      subtitle,
+      content_id,
+      content,
+      author,
+      sourceNews,
+      urlSource,
+      urlImg,
+      descriptionImg,
+      category,
+      tags,
+      toSchedule,
+      status,
+    } = request.body;
+
+    try {
+      // Atualizar o Content
+      const newsContent = await NewsContentRepository.update(content_id, content);
+      if (!newsContent || !newsContent.id) {
+        return response.status(500).json({ error: 'Error creating news content' });
+      }
+
+      // Obter o ID da categoria
+      const [categoryResult] = await db.query(`
+        SELECT id
+        FROM categories_news
+        WHERE name = ($1)
+      `, [category]);
+
+      const categoryId = categoryResult.id;
+
+      // Criar o registro na tabela news usando o ID do newsContent
+      const news = await NewsRepository.create({
+        title,
+        subtitle,
+        author,
+        sourceNews,
+        urlSource,
+        urlImg,
+        descriptionImg,
+        categoryId,
+        tags,
+        toSchedule,
+        status,
+      });
+
+      // Responder com os dados do news
+      response.json(news);
+    } catch (error) {
+      console.error('Error creating news:', error);
+      response.status(500).json({ error: 'Internal server error' });
+    }
+  }
+
   // Apagar um registro
   async delete(request, response) {
     const { id } = request.params;

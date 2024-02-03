@@ -30,6 +30,16 @@ class NewsRepository {
     return row;
   }
 
+  async update(content_id, content) {
+    const update_content = await db.query(`
+      UPDATE  news_content
+      SET     content = $2
+      WHERE   id = $1
+    `, [content_id, content]);
+
+    return update_content;
+  }
+
   // async delete(id) {
   //   const deleteOp = await db.query(`
   //   DELETE FROM news WHERE id = $1
