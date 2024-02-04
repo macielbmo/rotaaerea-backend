@@ -1,6 +1,7 @@
 const NewsRepository = require('../repositories/NewsRepository');
 const db = require('../../database');
 const NewsContentRepository = require('../repositories/NewsContentRepository');
+const CategoriesNewsRepository = require('../repositories/CategoriesNewsRepository');
 
 class NewsController {
   // Listar todos os registros
@@ -103,6 +104,8 @@ class NewsController {
 
   // Update de registro
   async update(request, response) {
+    const { id } = request.params;
+
     const {
       title,
       subtitle,
@@ -122,21 +125,31 @@ class NewsController {
     try {
       // Atualizar o Content
       const newsContent = await NewsContentRepository.update(content_id, content);
-      if (!newsContent || !newsContent.id) {
-        return response.status(500).json({ error: 'Error creating news content' });
-      }
 
       // Obter o ID da categoria
-      const [categoryResult] = await db.query(`
-        SELECT id
-        FROM categories_news
-        WHERE name = ($1)
-      `, [category]);
+      const categoryResult = await CategoriesNewsRepository.getId(category);
 
       const categoryId = categoryResult.id;
 
-      // Criar o registro na tabela news usando o ID do newsContent
-      const news = await NewsRepository.create({
+      console.log(
+        title,
+        subtitle,
+        content_id,
+        content,
+        author,
+        sourceNews,
+        urlSource,
+        urlImg,
+        descriptionImg,
+        category,
+        tags,
+        toSchedule,
+        status,
+      );
+
+      // Editar noticia
+      const news = await NewsRepository.update({
+        id,
         title,
         subtitle,
         author,
@@ -153,7 +166,7 @@ class NewsController {
       // Responder com os dados do news
       response.json(news);
     } catch (error) {
-      console.error('Error creating news:', error);
+      console.error('Error update news:', error);
       response.status(500).json({ error: 'Internal server error' });
     }
   }

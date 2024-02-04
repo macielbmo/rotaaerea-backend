@@ -79,19 +79,33 @@ class NewsRepository {
     toSchedule,
     status,
   }) {
+    console.log(
+      id,
+      title,
+      subtitle,
+      author,
+      sourceNews,
+      urlSource,
+      urlImg,
+      descriptionImg,
+      categoryId,
+      tags,
+      toSchedule,
+      status,
+    );
     const update_news = await db.query(`
       UPDATE  news
       SET     title = $2,
               subtitle = $3,
               author = $4,
-              sourceNews = $5,
-              urlSource = $6,
-              urlImg = $7,
-              descriptionImg = $8,
-              categoryId = $9,
+              news_source = $5,
+              url_source = $6,
+              url_img = $7,
+              img_description = $8,
+              category_news = $9,
               tags = $10,
-              toSchedule = $11,
-              status = $12,
+              schedule = $11,
+              status = $12
       WHERE   news.id = $1
     `, [id, title, subtitle, author, sourceNews, urlSource, urlImg, descriptionImg, categoryId, tags, toSchedule, status]);
 

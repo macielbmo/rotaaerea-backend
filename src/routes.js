@@ -44,6 +44,7 @@ router.get('/news', NewsController.index);
 router.get('/newsLimited', NewsController.getLimit);
 router.get('/news/:id', NewsController.show);
 router.post('/news', NewsController.store);
+router.put('/news/:id', NewsController.update);
 router.delete('/news/:id', NewsController.delete);
 
 // Rota do Upload de imagem

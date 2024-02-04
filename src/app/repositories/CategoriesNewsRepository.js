@@ -50,6 +50,18 @@ class CategoriesNewsRespository {
 
     return row;
   }
+
+  async getId(nameCategory) {
+    const [category] = await db.query(`
+    SELECT id
+    FROM categories_news
+    WHERE name = ($1)
+  `, [nameCategory]);
+
+    console.log(category);
+
+    return category;
+  }
 }
 
 module.exports = new CategoriesNewsRespository();

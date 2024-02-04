@@ -35,6 +35,7 @@ class NewsRepository {
       UPDATE  news_content
       SET     content = $2
       WHERE   id = $1
+      RETURNING *
     `, [content_id, content]);
 
     return update_content;
