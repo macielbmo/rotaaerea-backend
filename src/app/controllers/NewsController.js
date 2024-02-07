@@ -102,7 +102,7 @@ class NewsController {
     }
   }
 
-  // Update de registro
+  // Update News
   async update(request, response) {
     const { id } = request.params;
 
@@ -131,22 +131,6 @@ class NewsController {
 
       const categoryId = categoryResult.id;
 
-      console.log(
-        title,
-        subtitle,
-        content_id,
-        content,
-        author,
-        sourceNews,
-        urlSource,
-        urlImg,
-        descriptionImg,
-        category,
-        tags,
-        toSchedule,
-        status,
-      );
-
       // Editar noticia
       const news = await NewsRepository.update({
         id,
@@ -164,11 +148,20 @@ class NewsController {
       });
 
       // Responder com os dados do news
-      response.json(news);
+      response.status(204);
     } catch (error) {
       console.error('Error update news:', error);
       response.status(500).json({ error: 'Internal server error' });
     }
+  }
+
+  // Update Satatus News
+  async updateStatus(request, response) {
+    const { id } = request.params;
+    const { status } = request.body;
+
+    const news = await NewsRepository.updateStatus({ id, status });
+    response.sendStatus(204);
   }
 
   // Apagar um registro

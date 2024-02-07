@@ -79,20 +79,6 @@ class NewsRepository {
     toSchedule,
     status,
   }) {
-    console.log(
-      id,
-      title,
-      subtitle,
-      author,
-      sourceNews,
-      urlSource,
-      urlImg,
-      descriptionImg,
-      categoryId,
-      tags,
-      toSchedule,
-      status,
-    );
     const update_news = await db.query(`
       UPDATE  news
       SET     title = $2,
@@ -110,6 +96,17 @@ class NewsRepository {
     `, [id, title, subtitle, author, sourceNews, urlSource, urlImg, descriptionImg, categoryId, tags, toSchedule, status]);
 
     return update_news;
+  }
+
+  async updateStatus({ id, status }) {
+    const update_status = await db.query(`
+    UPDATE  news
+    SET     status = $1
+    WHERE   news.id = $2
+    RETURNING *
+  `, [status, id]);
+
+    return update_status;
   }
 
   async delete(id) {
